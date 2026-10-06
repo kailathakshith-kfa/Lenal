@@ -454,17 +454,17 @@ func _update_quest_info(state_val: int) -> void:
 			quest_title.text = "🐔 FIND THE CHICKEN"
 			quest_hint.text = "Follow the clucking sounds across the village to catch the runaway chicken!"
 		2: # LANTERN_FOUND
-			quest_title.text = "Follow the Chicken"
-			quest_hint.text = "The chicken is bolting toward the forest path!"
+			quest_title.text = "🔙 Return to the Old Man"
+			quest_hint.text = "You caught the chicken and retrieved the lantern! Return to the village plaza and talk to the Old Man."
 		3: # CAVE_QUEST
 			quest_title.text = "ENTER THE CAVE"
-			quest_hint.text = "Follow the chicken into the dark cave entrance ahead!"
+			quest_hint.text = "Follow the forest trail into the mysterious mountain cave and investigate!"
 		4: # CAVE_NOTE_FOUND
 			quest_title.text = "🔙 GO BACK TO THE OLD MAN"
-			quest_hint.text = "Head back through the forest to the village plaza where the old man was"
+			quest_hint.text = "Head back through the forest to the village plaza where the old man was sitting."
 		5: # GAME_OVER
 			quest_title.text = "Quest Complete!"
-			quest_hint.text = "You discovered the secrets of the village!"
+			quest_hint.text = "You discovered the secrets of the village and collected your reward!"
 
 func _get_current_target_info() -> Dictionary:
 	var gs = get_node_or_null("/root/GameState")
@@ -476,14 +476,20 @@ func _get_current_target_info() -> Dictionary:
 			var interactables = get_tree().get_nodes_in_group("interactable")
 			for obj in interactables:
 				if obj.name == "Chicken" or obj.has_method("trigger_alert"):
-					return {"pos": obj.global_position + Vector3(0, 0.8, 0), "icon": "🐔", "name": "Chicken"}
-			return {"pos": Vector3(-3.2, 0.5, -1.8), "icon": "🐔", "name": "Chicken"}
+					var is_cornered = obj.get("state") == 3 # ChickenState.CORNERED
+					var name_str = "Catch Chicken!" if is_cornered else "Runaway Chicken"
+					return {"pos": obj.global_position + Vector3(0, 0.8, 0), "icon": "🐔", "name": name_str}
+			return {"pos": Vector3(-3.2, 0.5, -1.8), "icon": "🐔", "name": "Runaway Chicken"}
 		2: # LANTERN_FOUND
-			return {"pos": Vector3(3.8, 1.5, 1.2), "icon": "👴", "name": "Old Man"}
+			return {"pos": Vector3(3.8, 1.5, 1.2), "icon": "👴", "name": "Old Man (Village)"}
 		3: # CAVE_QUEST
-			return {"pos": Vector3(-2.0, 1.5, -84.0), "icon": "⛰️", "name": "The Cave"}
+			# Outside cave: guide to cave entrance; inside cave: guide directly to glowing relic
+			if global_position.x > 0.0 or global_position.z > -80.0:
+				return {"pos": Vector3(1.0, 1.5, -84.0), "icon": "⛰️", "name": "Cave Entrance"}
+			else:
+				return {"pos": Vector3(-18.0, 1.4, -84.0), "icon": "✨", "name": "Glowing Relic"}
 		4: # CAVE_NOTE_FOUND
-			return {"pos": Vector3(3.8, 1.0, 1.2), "icon": "👴", "name": "Old Man's Spot"}
+			return {"pos": Vector3(3.8, 1.0, 1.2), "icon": "💰", "name": "Old Man's Spot"}
 		_:
 			return {}
 

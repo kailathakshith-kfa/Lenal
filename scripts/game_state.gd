@@ -27,7 +27,7 @@ func set_state(new_state: State) -> void:
 				update_objective("🐔 FIND THE CHICKEN")
 			State.LANTERN_FOUND:
 				has_lantern = true
-				update_objective("Follow the Chicken toward the Forest!")
+				update_objective("🔙 RETURN TO THE OLD MAN")
 			State.CAVE_QUEST:
 				update_objective("ENTER THE CAVE")
 			State.CAVE_NOTE_FOUND:

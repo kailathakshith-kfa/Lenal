@@ -341,7 +341,10 @@ func interact(player: Node) -> String:
 		_update_badge()
 		
 		if player and player.has_method("show_status_message"):
-			player.show_status_message("YOU GOT THE LANTERN.", 4.0)
+			player.show_status_message("YOU GOT THE LANTERN! Return to the Old Man.", 4.0)
+		
+		if player and player.has_method("show_monologue"):
+			player.show_monologue("PLAYER: \"Got the lantern! Now I should take it back to the Old Man in the village.\"", 3.2)
 		
 		return "YOU GOT THE LANTERN."
 	else:

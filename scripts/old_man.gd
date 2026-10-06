@@ -90,6 +90,8 @@ func _process(_delta: float) -> void:
 func get_interact_text() -> String:
 	if not visual_root or not visual_root.visible:
 		return ""
+	if GameState.current_state == GameState.State.LANTERN_FOUND:
+		return "Report to Old Man"
 	return "Talk to Old Man"
 
 func interact(player: Node) -> String:
@@ -105,7 +107,7 @@ func interact(player: Node) -> String:
 			start_conversation(conv_lantern_returned)
 			return ""
 		elif GameState.current_state == GameState.State.CAVE_QUEST:
-			return "Old Man: 'Chicken cave ke taraf gayi hai, jaldi jaa!'"
+			return "Old Man: 'Gufa mein jao beta, chicken wahi gayi hai. Simple kaam hai!'"
 		else:
 			return "Old Man: 'Bas usko dhoondh ke mere paas le aana. Simple kaam hai.'"
 	else:

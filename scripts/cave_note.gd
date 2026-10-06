@@ -26,12 +26,20 @@ func _process(_delta: float) -> void:
 
 func get_interact_text() -> String:
 	if not has_been_read:
+		if GameState.current_state < GameState.State.CAVE_QUEST:
+			return "Dormant Relic (Report to Old Man first)"
 		return "Inspect Glowing Relic"
 	return "Read Cave Note"
 
 func interact(player: Node) -> String:
 	current_player = player
 	if not has_been_read:
+		if GameState.current_state < GameState.State.CAVE_QUEST:
+			if current_player and current_player.has_method("show_monologue"):
+				current_player.show_monologue("PLAYER: \"The relic is dormant... I should take the lantern back to the Old Man first!\"", 3.2)
+			if current_player and current_player.has_method("show_status_message"):
+				current_player.show_status_message("Objective: Report back to the Old Man in the village plaza!", 3.5)
+			return "The relic is dormant. Report back to the Old Man first."
 		_play_chamber_flash_sequence()
 		return ""
 	else:

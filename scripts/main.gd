@@ -112,8 +112,8 @@ func _process(_delta: float) -> void:
 		has_entered_forest = true
 		_trigger_forest_monologues()
 
-	# 2. Cave Entrance Meme Cutscene Trigger (approaching mountain cliff cave entrance)
-	if player_z < -75.0 and not has_triggered_cave_meme and GameState.current_state >= GameState.State.CHICKEN_QUEST:
+	# 2. Cave Entrance Meme Cutscene Trigger (entering cave steps on CAVE_QUEST)
+	if player_pos.x < 1.0 and player_z < -80.0 and not has_triggered_cave_meme and GameState.current_state == GameState.State.CAVE_QUEST:
 		has_triggered_cave_meme = true
 		_play_chosen_one_cutscene()
 
@@ -136,21 +136,9 @@ func _process(_delta: float) -> void:
 func _trigger_forest_monologues() -> void:
 	if not player or not player.has_method("show_monologue"):
 		return
-	player.show_monologue("PLAYER: \"Okay... this wasn't part of the plan.\"", 2.6)
-	
-	await get_tree().create_timer(3.0).timeout
-	SFX.play_chicken()
-	player.show_monologue("PLAYER: \"Wait... woh andar gayi?\"", 2.2)
-	
-	await get_tree().create_timer(2.4).timeout
-	player.show_monologue("PLAYER: \"Chicken cave mein kyun jaayegi?\"", 2.4)
-	
-	await get_tree().create_timer(2.6).timeout
-	player.show_monologue("PLAYER: \"Yeah... I'm definitely following a chicken into a cave.\"", 2.8)
+	player.show_monologue("PLAYER: \"Arey! The chicken is heading deep into the forest trail!\"", 2.8)
 
 func _play_chosen_one_cutscene() -> void:
-	GameState.set_state(GameState.State.CAVE_QUEST)
-	
 	if DisplayServer.get_name() == "headless":
 		return
 		
